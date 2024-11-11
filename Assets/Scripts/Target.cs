@@ -12,6 +12,11 @@ public class Target : MonoBehaviour
     
     private Rigidbody targetRb;
 
+    private GameManager gameManager;
+
+    public int pointValue;
+    public ParticleSystem explosionParticles;
+
     void Start()
     {
         targetRb = GetComponent<Rigidbody>();
@@ -20,6 +25,8 @@ public class Target : MonoBehaviour
         targetRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);
 
         transform.position = RandomSpawnPos();
+
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     void Update()
@@ -30,6 +37,8 @@ public class Target : MonoBehaviour
     private void OnMouseDown()
     {
         Destroy(gameObject);
+        Instantiate(explosionParticles, transform.position, explosionParticles.transform.rotation);
+        gameManager.UpdateScore(pointValue);
     }
 
     private void OnTriggerEnter(Collider other)
